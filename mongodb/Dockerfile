@@ -21,8 +21,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 
 WORKDIR /scripts
 
-COPY backup-mongodb.sh .
-RUN chmod +x backup-mongodb.sh
+COPY backup.sh .
+RUN chmod +x backup.sh
 
 ENV MONGODB_URI="" \
     MONGODB_OPLOG="" \
@@ -37,4 +37,4 @@ RUN apt-get clean autoclean && \
     apt-get autoremove --yes && \
     rm -rf /var/lib/apt/lists/*
 
-CMD ["/scripts/backup-mongodb.sh"]
+CMD ["/scripts/backup.sh"]

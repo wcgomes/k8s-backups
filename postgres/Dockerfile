@@ -20,8 +20,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 
 WORKDIR /scripts
 
-COPY backup-postgres.sh .
-RUN chmod +x backup-postgres.sh
+COPY backup.sh .
+RUN chmod +x backup.sh
 
 ENV PG_HOST="" \
     PG_PORT="" \
@@ -39,4 +39,4 @@ RUN apt-get clean autoclean && \
     apt-get autoremove --yes && \
     rm -rf /var/lib/apt/lists/*
 
-CMD ["/scripts/backup-postgres.sh"]
+CMD ["/scripts/backup.sh"]
