@@ -1,0 +1,25 @@
+apiVersion: v1
+entries:
+  k8s-backup-mongodb:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2023-01-22T02:19:15.896154041Z"
+    description: MongoDB backup as a cronjob - helm package
+    digest: 07dd27a15e2df40956a3d6a6853cb5900b1960afbd452a3c99f82e097f43b1c1
+    name: k8s-backup-mongodb
+    type: application
+    urls:
+    - https://github.com/wcgomes/k8s-backups/releases/download/k8s-backup-mongodb-0.1.0/k8s-backup-mongodb-0.1.0.tgz
+    version: 0.1.0
+  k8s-backup-postgres:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2023-01-22T02:19:16.044126098Z"
+    description: Postgres backup as a cronjob - helm package
+    digest: b56a02d653b87cba3af717b262fca6220dec6d7659f604205cbb6aa838e36462
+    name: k8s-backup-postgres
+    type: application
+    urls:
+    - https://github.com/wcgomes/k8s-backups/releases/download/k8s-backup-postgres-0.1.0/k8s-backup-postgres-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-01-22T02:19:15.670596775Z"
