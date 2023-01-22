@@ -1,0 +1,58 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: k8s-backup-mongodb
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  concurrencyPolicy: Forbid
+  suspend: false
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: k8s-backup-mongodb
+              image: {{ .Values.image }}
+              imagePullPolicy: {{ .Values.imagePullPolicy }}
+              env:
+                - name: MONGODB_URI
+                  valueFrom:
+                    secretKeyRef:
+                      name: k8s-backup-mongodb
+                      key: mongoDbUri
+                - name: MONGODB_OPLOG
+                  value: {{ .Values.withOplog | quote }}
+                - name: BUCKET_URI
+                  valueFrom:
+                    secretKeyRef:
+                      name: k8s-backup-mongodb
+                      key: bucketUri
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: k8s-backup-mongodb
+                      key: awsAccessKeyId
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: k8s-backup-mongodb
+                      key: awsSecretAccessKey
+                - name: AWS_DEFAULT_REGION
+                  valueFrom:
+                    secretKeyRef:
+                      name: k8s-backup-mongodb
+                      key: awsDefaultRegion
+                - name: S3_ENDPOINT_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: k8s-backup-mongodb
+                      key: s3EndpointUrl
+                - name: PASSWORD_7ZIP
+                  valueFrom:
+                    secretKeyRef:
+                      name: k8s-backup-mongodb
+                      key: password7Zip
