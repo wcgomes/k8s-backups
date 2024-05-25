@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "k8s-backups-mongodb-sync.fullname" . }}
+  labels:
+    app: {{ template "k8s-backups-mongodb-sync.name" . }}
+    version: {{ .Chart.AppVersion }}
+    release: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ template "k8s-backups-mongodb-sync.fullname" . }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ template "k8s-backups-mongodb-sync.chart" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "k8s-backups-mongodb-sync.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "k8s-backups-mongodb-sync.name" . }}
+        version: {{ .Chart.AppVersion }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.image }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          ports:
+            - name: http
+              containerPort: 27182
+              protocol: TCP
+          env:
+          - name: CLUSTER0_URI
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "k8s-backups-mongodb-sync.fullname" . }}
+                key: cluster0
+          - name: CLUSTER1_URI
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "k8s-backups-mongodb-sync.fullname" . }}
+                key: cluster1
+          - name: LOAD_LEVEL
+            value: {{ .Values.loadLevel | quote }}
+          - name: VERBOSITY
+            value: {{ .Values.verbosity | quote }}
+          - name: DISABLE_TELEMETRY
+            value: {{ .Values.disableTelemetry | quote }}
