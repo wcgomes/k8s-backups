@@ -46,5 +46,3 @@ spec:
             value: {{ .Values.loadLevel | quote }}
           - name: VERBOSITY
             value: {{ .Values.verbosity | quote }}
-          - name: DISABLE_TELEMETRY
-            value: {{ .Values.disableTelemetry | quote }}

@@ -30,7 +30,7 @@ ENV CLUSTER0_URI="" \
     CLUSTER1_URI="" \
     LOAD_LEVEL="3" \
     VERBOSITY="DEBUG" \
-    DISABLE_TELEMETRY=""
+    DISABLE_TELEMETRY="false"
 
 ENTRYPOINT ["/scripts/mongosync.sh"]
 

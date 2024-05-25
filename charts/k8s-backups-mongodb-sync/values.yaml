@@ -8,7 +8,6 @@ imagePullPolicy: IfNotPresent
 
 loadLevel: "3"
 verbosity: "DEBUG"
-disableTelemetry: "true"
 
 secrets:
   cluster0: ""
