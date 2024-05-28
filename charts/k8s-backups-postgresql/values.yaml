@@ -1,14 +1,15 @@
-# Default values for k8s-backups-postgres.
+# Default values for k8s-backups-postgresql.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 schedule: "0 0 * * *"
-image: "wcgomes/k8s-backups-postgres:0.1.0"
+image: "wcgomes/k8s-backups-postgresql:0.2.0"
 
 imagePullPolicy: IfNotPresent
 
 secrets:
   pgHost: ""
+  pgRestoreHost: ""
   pgPort: "5432"
   pgDatabase: ""
   pgUser: ""

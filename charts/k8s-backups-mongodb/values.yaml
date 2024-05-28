@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 schedule: "0 0 * * *"
-image: "wcgomes/k8s-backups-mongodb:0.1.0"
+image: "wcgomes/k8s-backups-mongodb:0.2.0"
 
 imagePullPolicy: IfNotPresent
 
@@ -11,6 +11,7 @@ withOplog: "true"
 
 secrets:
   mongoDbUri: ""
+  mongoRestoreDbUri: ""
   bucketUri: ""
   awsAccessKeyId: ""
   awsSecretAccessKey: ""

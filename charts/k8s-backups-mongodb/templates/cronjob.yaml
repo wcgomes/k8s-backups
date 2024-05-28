@@ -24,6 +24,11 @@ spec:
                     secretKeyRef:
                       name: k8s-backups-mongodb
                       key: mongoDbUri
+                - name: MONGODB_RESTORE_URI
+                  valueFrom:
+                    secretKeyRef:
+                      name: k8s-backups-mongodb
+                      key: mongoRestoreDbUri
                 - name: MONGODB_OPLOG
                   value: {{ .Values.withOplog | quote }}
                 - name: BUCKET_URI

@@ -1,23 +1,23 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Importando pacotes do MongoDB
-# https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/?_ga=2.22663293.775193578.1674019496-1715206182.1662002499#install-mongodb-community-edition
+# https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/#install-mongodb-community-edition
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \ 
-    apt-get install -y wget gnupg
+RUN apt-get update && \
+    apt-get install -y gnupg curl && \   
+    apt-get clean
 
-RUN wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add -
-RUN echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+RUN curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
 
-# Instala mongodb backup tools
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \ 
-    apt-get install -y \
-    mongodb-org-tools=6.0.3
+RUN echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
 
-# Instala AWS cli e p7zip
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    awscli \
-    p7zip-full
+# Instala mongodb backup tools, AWS cli e p7zip
+RUN apt-get update && \ 
+    apt-get install -y mongodb-org-tools=7.0.8 awscli p7zip-full && \ 
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 WORKDIR /scripts
 
@@ -25,6 +25,7 @@ COPY backup.sh .
 RUN chmod +x backup.sh
 
 ENV MONGODB_URI="" \
+    MONGODB_RESTORE_URI="" \
     MONGODB_OPLOG="" \
     BUCKET_URI="" \
     AWS_ACCESS_KEY_ID="" \
@@ -32,9 +33,5 @@ ENV MONGODB_URI="" \
     AWS_DEFAULT_REGION="" \
     S3_ENDPOINT_URL="" \
     PASSWORD_7ZIP=""
-
-RUN apt-get clean autoclean && \
-    apt-get autoremove --yes && \
-    rm -rf /var/lib/apt/lists/*
 
 CMD ["/scripts/backup.sh"]

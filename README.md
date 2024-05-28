@@ -18,9 +18,9 @@ To install a chart:
 
     helm install backup-mongodb k8s-backups/k8s-backups-mongodb -f .\values.yaml 
 
-### Postgres
+### Postgresql
 
-    helm install backup-postgres k8s-backups/k8s-backups-postgres -f .\values.yaml 
+    helm install backup-postgresql k8s-backups/k8s-backups-postgresql -f .\values.yaml 
 
 To uninstall the chart:
 
