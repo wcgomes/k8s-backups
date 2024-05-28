@@ -7,6 +7,10 @@ image: "wcgomes/k8s-backups-postgresql:0.2.0"
 
 imagePullPolicy: IfNotPresent
 
+# use a existing secret
+existingSecret: ""
+
+# create a new secret with the specified values
 secrets:
   pgHost: ""
   pgRestoreHost: ""

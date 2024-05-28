@@ -9,6 +9,10 @@ imagePullPolicy: IfNotPresent
 
 withOplog: "true"
 
+# use a existing secret
+existingSecret: ""
+
+# create a new secret with the specified values
 secrets:
   mongoDbUri: ""
   mongoRestoreDbUri: ""

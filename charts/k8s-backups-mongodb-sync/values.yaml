@@ -6,9 +6,14 @@ image: "wcgomes/k8s-backups-mongodb-sync:0.1.0"
 
 imagePullPolicy: IfNotPresent
 
+# mongo-sync
 loadLevel: "3"
 verbosity: "DEBUG"
 
+# use a existing secret
+existingSecret: ""
+
+# create a new secret with the specified values
 secrets:
   cluster0: ""
   cluster1: ""

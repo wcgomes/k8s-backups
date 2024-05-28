@@ -35,12 +35,12 @@ spec:
           - name: CLUSTER0_URI
             valueFrom:
               secretKeyRef:
-                name: {{ template "k8s-backups-mongodb-sync.fullname" . }}
+                name: {{ template "k8s-backups-mongodb-sync.secret" . }}
                 key: cluster0
           - name: CLUSTER1_URI
             valueFrom:
               secretKeyRef:
-                name: {{ template "k8s-backups-mongodb-sync.fullname" . }}
+                name: {{ template "k8s-backups-mongodb-sync.secret" . }}
                 key: cluster1
           - name: LOAD_LEVEL
             value: {{ .Values.loadLevel | quote }}

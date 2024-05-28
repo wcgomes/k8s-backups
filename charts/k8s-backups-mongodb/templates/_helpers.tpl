@@ -60,3 +60,14 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create the name of the secret
+*/}}
+{{- define "k8s-backups-mongodb.secret" -}}
+{{- if not .Values.existingSecret }}
+{{- default (include "k8s-backups-mongodb.fullname" .) }}
+{{- else }}
+{{- default "default" .Values.existingSecret }}
+{{- end }}
+{{- end }}
