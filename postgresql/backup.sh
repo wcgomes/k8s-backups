@@ -27,7 +27,10 @@ if [ ! -z "$PG_HOST" ]; then
   echo "[$SCRIPT_NAME] Dumping all PostgreSQL databases..."
 
   # run database dump
-  PGPASSWORD="$PG_PASSWORD" pg_dumpall -h $PG_HOST -p $PG_PORT -U $PG_USER --clean > $ARCHIVE_NAME
+  PGPASSWORD="$PG_PASSWORD" pg_dumpall -h $PG_HOST -p $PG_PORT -U $PG_USER --clean --if-exists > pgdumpall.sql
+
+  # adding WITH (FORCE) to DROP DATABASE commands
+  sed '/DROP DATABASE/ s/;$/ WITH (FORCE);/' pgdumpall.sql > $ARCHIVE_NAME
 
   # compress backup file for upload
   echo "[$SCRIPT_NAME] Compressing files..."
@@ -78,6 +81,10 @@ if [ ! -z "$PG_RESTORE_HOST" ]; then
   fi
 
   echo "[$SCRIPT_NAME] Restoring PostgreSQL dump..."
+
+  # avoid dropping/creating current user
+  sed -i "/DROP ROLE IF EXISTS $PG_USER;/ s/^/-- /" "$ARCHIVE_NAME"
+  sed -i "/CREATE ROLE $PG_USER;/ s/^/-- /" "$ARCHIVE_NAME"
 
   # run database restore
   PGPASSWORD="$PG_PASSWORD" psql -v ON_ERROR_STOP=1 -f "$ARCHIVE_NAME" -h $PG_RESTORE_HOST -p $PG_PORT -U $PG_USER $PG_DATABASE
