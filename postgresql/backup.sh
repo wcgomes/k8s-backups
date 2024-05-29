@@ -27,7 +27,7 @@ if [ ! -z "$PG_HOST" ]; then
   echo "[$SCRIPT_NAME] Dumping all PostgreSQL databases..."
 
   # run database dump
-  PGPASSWORD="$PG_PASSWORD" pg_dumpall -h $PG_HOST -p $PG_PORT -U $PG_USER >$ARCHIVE_NAME
+  PGPASSWORD="$PG_PASSWORD" pg_dumpall -h $PG_HOST -p $PG_PORT -U $PG_USER --clean > $ARCHIVE_NAME
 
   # compress backup file for upload
   echo "[$SCRIPT_NAME] Compressing files..."
@@ -38,10 +38,10 @@ if [ ! -z "$PG_HOST" ]; then
   if [ ! -z "$PASSWORD_7ZIP" ]; then
     echo "[$SCRIPT_NAME] 7Zipping with password..."
 
-    COPY_NAME=${ARCHIVE_NAME//tar.gz/7z}
+    COPY_NAME=${COMPRESSED_ARCHIVE_NAME//tar.gz/7z}
     7za a -tzip -mem=AES256 -p"$PASSWORD_7ZIP" "$COPY_NAME" "$COMPRESSED_ARCHIVE_NAME"
   else
-    COPY_NAME=$ARCHIVE_NAME
+    COPY_NAME=$COMPRESSED_ARCHIVE_NAME
   fi
 
   echo "[$SCRIPT_NAME] Uploading compressed archive to S3 bucket..."
@@ -74,13 +74,13 @@ if [ ! -z "$PG_RESTORE_HOST" ]; then
     echo "[$SCRIPT_NAME] Decompressing files..."
 
     ARCHIVE_NAME=${COMPRESSED_ARCHIVE_NAME//tar.gz/sql}
-    tar -xzf "$ARCHIVE_NAME"
+    tar -xzf "$COMPRESSED_ARCHIVE_NAME"
   fi
 
   echo "[$SCRIPT_NAME] Restoring PostgreSQL dump..."
 
   # run database restore
-  PGPASSWORD="$PG_PASSWORD" psql -f "$ARCHIVE_NAME" -h $PG_RESTORE_HOST -p $PG_PORT -U $PG_USER postgresql --clean
+  PGPASSWORD="$PG_PASSWORD" psql -v ON_ERROR_STOP=1 -f "$ARCHIVE_NAME" -h $PG_RESTORE_HOST -p $PG_PORT -U $PG_USER $PG_DATABASE
 
   echo "[$SCRIPT_NAME] Restore complete!"
 fi
