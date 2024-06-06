@@ -5,6 +5,8 @@ set -e
 SCRIPT_NAME=backup-mongodb
 OPLOG_FLAG=""
 OPLOG_REPLAY_FLAG=""
+MONGODB_NSINCLUDE_FLAG=""
+MONGODB_NSEXCLUDE_FLAG=""
 
 # print tool version
 mongodump --version
@@ -84,12 +86,26 @@ if [ ! -z "$MONGODB_RESTORE_URI" ]; then
 
   echo "[$SCRIPT_NAME] Restoring MongoDB dump..."
 
-  # run database restore
-  mongorestore $OPLOG_REPLAY_FLAG \
-    --archive="$ARCHIVE_NAME" \
-    --uri "$MONGODB_RESTORE_URI" \
-    --gzip \
-    --drop
+  # check if restore uri contains "mongodb.net"
+  # https://www.mongodb.com/docs/atlas/import/mongorestore/#cluster-security
+  if [[ $MONGODB_RESTORE_URI == *"mongodb.net"* ]]; then
+      echo "[$SCRIPT_NAME] Excluding admin.system.* to Atlas Cluster restore."
+
+      # run database restore to atlas cluster
+      mongorestore $OPLOG_REPLAY_FLAG \
+        --archive="$ARCHIVE_NAME" \
+        --uri "$MONGODB_RESTORE_URI" \
+        --nsExclude "admin.system.*" \
+        --gzip \
+        --drop
+  else
+      # run database restore
+      mongorestore $OPLOG_REPLAY_FLAG \
+        --archive="$ARCHIVE_NAME" \
+        --uri "$MONGODB_RESTORE_URI" \
+        --gzip \
+        --drop
+  fi
 
   echo "[$SCRIPT_NAME] Restore complete!"
 fi
