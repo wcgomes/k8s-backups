@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 schedule: "0 0 * * *"
-image: "wcgomes/k8s-backups-postgresql:0.3.0"
+image: "wcgomes/k8s-backups-postgresql:0.3.1"
 
 imagePullPolicy: IfNotPresent
 
