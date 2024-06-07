@@ -3,4 +3,4 @@ appVersion: 0.3.1
 description: Postgresql backup as a cronjob
 name: k8s-backups-postgresql
 type: application
-version: 0.3.1
+version: 0.3.2
