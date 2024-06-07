@@ -21,7 +21,8 @@ spec:
               {{- if .Values.postscript }}
               volumeMounts:
                 - name: postscript
-                  mountPath: /scripts
+                  mountPath: /scripts-custom
+                  readOnly: true
               {{- end }}
               env:
                 - name: PG_HOST

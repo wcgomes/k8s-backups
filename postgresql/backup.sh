@@ -109,7 +109,7 @@ fi
 
 if test -e "postscript.sh"; then
   echo "$SCRIPT_NAME Post processing script..."
-  source postscript.sh
+  source /scripts-custom/postscript.sh
 fi
 
 echo "$SCRIPT_NAME Finished!"
