@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # https://www.postgresql.org/download/linux/ubuntu/
 
 RUN apt-get update && \
-    apt-get install -y gnupg postgresql-common && \ 
+    apt-get install -y gnupg curl postgresql-common && \ 
     apt-get clean
 
 RUN /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
@@ -16,6 +16,12 @@ RUN apt-get update && \
     apt-get install -y postgresql-16 awscli p7zip-full && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+# Instala kubectl
+RUN curl -LO "https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl" && \
+    curl -LO "https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl.sha256" && \
+    echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check && \
+    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 WORKDIR /scripts
 

@@ -1,0 +1,8 @@
+{{- if .Values.postscript }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "k8s-backups-postgresql.fullname" . }}
+data:
+  postscript.sh: {{ .Values.postscript | quote }}
+{{- end }}

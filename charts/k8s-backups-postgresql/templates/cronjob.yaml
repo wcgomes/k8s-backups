@@ -8,16 +8,21 @@ spec:
   suspend: false
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
-
   jobTemplate:
     spec:
       template:
         spec:
+          serviceAccountName: {{ template "k8s-backups-postgresql.fullname" . }}
           restartPolicy: OnFailure
           containers:
             - name: {{ .Chart.Name }}
               image: {{ .Values.image }}
               imagePullPolicy: {{ .Values.imagePullPolicy }}
+              {{- if .Values.postscript }}
+              volumeMounts:
+                - name: postscript
+                  mountPath: /scripts
+              {{- end }}
               env:
                 - name: PG_HOST
                   valueFrom:
@@ -79,3 +84,9 @@ spec:
                     secretKeyRef:
                       name: {{ template "k8s-backups-postgresql.secret" . }}
                       key: password7Zip
+          {{- if .Values.postscript }}
+          volumes:
+            - name: postscript
+              configMap:
+                name: {{ template "k8s-backups-postgresql.fullname" . }}
+          {{- end }}

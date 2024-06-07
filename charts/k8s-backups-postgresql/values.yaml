@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 schedule: "0 0 * * *"
-image: "wcgomes/k8s-backups-postgresql:0.2.0"
+image: "wcgomes/k8s-backups-postgresql:0.3.0"
 
 imagePullPolicy: IfNotPresent
 
@@ -24,3 +24,12 @@ secrets:
   s3EndpointUrl: ""
   awsDefaultRegion: ""
   password7Zip: ""
+
+# shell script to run after backup is restored
+# use it restart services or make database adjustments to another enviroment
+# postscript: |
+#    #!/bin/bash
+#    echo "Initialing script..."
+#    # More commands here
+#    echo "Script completed."
+postscript: ""

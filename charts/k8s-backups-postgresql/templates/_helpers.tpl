@@ -51,17 +51,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Create the name of the service account to use
-*/}}
-{{- define "k8s-backups-postgresql.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "k8s-backups-postgresql.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-{{/*
 Create the name of the secret
 */}}
 {{- define "k8s-backups-postgresql.secret" -}}
