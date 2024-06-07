@@ -118,6 +118,16 @@ entries:
   k8s-backups-postgresql:
   - apiVersion: v2
     appVersion: 0.3.1
+    created: "2024-06-07T20:29:45.599382548Z"
+    description: Postgresql backup as a cronjob
+    digest: 7b2f3553c1067019752058b004f0af79b5993cbd7f8d81bd03c63fc334125a96
+    name: k8s-backups-postgresql
+    type: application
+    urls:
+    - https://github.com/wcgomes/k8s-backups/releases/download/k8s-backups-postgresql-0.3.2/k8s-backups-postgresql-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v2
+    appVersion: 0.3.1
     created: "2024-06-07T20:20:34.918115191Z"
     description: Postgresql backup as a cronjob
     digest: b3dd142c90f3d82354e1753f79cb50712311330cd5e4bf6c33e4fd363147bdcb
