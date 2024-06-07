@@ -107,8 +107,8 @@ if test -e "$COMPRESSED_ARCHIVE_NAME"; then
   rm "$COMPRESSED_ARCHIVE_NAME"
 fi
 
-if test -e "postscript.sh"; then
-  echo "$SCRIPT_NAME Post processing script..."
+if test -e "/scripts-custom/postscript.sh"; then
+  echo "$SCRIPT_NAME Running post processing script..."
   source /scripts-custom/postscript.sh
 fi
 
