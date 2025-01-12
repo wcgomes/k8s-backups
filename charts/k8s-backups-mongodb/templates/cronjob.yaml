@@ -31,6 +31,10 @@ spec:
                       key: mongoRestoreDbUri
                 - name: MONGODB_OPLOG
                   value: {{ .Values.withOplog | quote }}
+                - name: MONGODB_CONVERTLEGACYINDEXES_FLAG
+                  value: {{ .Values.convertLegacyIndexes | quote }}                 
+                - name: MONGODB_NOINDEXRESTORE_FLAG
+                  value: {{ .Values.noIndexRestore | quote }}    
                 - name: BUCKET_URI
                   valueFrom:
                     secretKeyRef:

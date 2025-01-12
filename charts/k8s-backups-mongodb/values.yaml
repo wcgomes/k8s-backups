@@ -3,11 +3,13 @@
 # Declare variables to be passed into your templates.
 
 schedule: "0 0 * * *"
-image: "wcgomes/k8s-backups-mongodb:0.4.0"
+image: "wcgomes/k8s-backups-mongodb:0.4.1"
 
 imagePullPolicy: IfNotPresent
 
 withOplog: "true"
+convertLegacyIndexes: "true"
+noIndexRestore: "false"
 
 # use a existing secret
 existingSecret: ""

@@ -5,8 +5,8 @@ set -e
 SCRIPT_NAME=backup-mongodb
 OPLOG_FLAG=""
 OPLOG_REPLAY_FLAG=""
-MONGODB_NSINCLUDE_FLAG=""
-MONGODB_NSEXCLUDE_FLAG=""
+CONVERTLEGACYINDEXES_FLAG=""
+NOINDEXRESTORE_FLAG=""
 
 # print tool version
 mongodump --version
@@ -31,6 +31,18 @@ if [ "$MONGODB_OPLOG" = "true" ]; then
   OPLOG_REPLAY_FLAG="--oplogReplay"
 fi
 
+if [ "$MONGODB_CONVERTLEGACYINDEXES_FLAG" = "true" ]; then
+  echo "[$SCRIPT_NAME] ConvertLegacyIndexes Enabled."
+  
+  CONVERTLEGACYINDEXES_FLAG="--convertLegacyIndexes"
+fi
+
+if [ "$MONGODB_NOINDEXRESTORE_FLAG" = "true" ]; then
+  echo "[$SCRIPT_NAME] NoIndexRestore Enabled."
+  
+  NOINDEXRESTORE_FLAG="--noIndexRestore"
+fi
+
 # backup
 if [ ! -z "$MONGODB_URI" ]; then
 
@@ -39,7 +51,7 @@ if [ ! -z "$MONGODB_URI" ]; then
   echo "[$SCRIPT_NAME] Dumping all MongoDB databases to compressed archive..."
 
   # run database dump
-  mongodump $OPLOG_FLAG \
+  mongodump $OPLOG_FLAG $CONVERTLEGACYINDEXES_FLAG $NOINDEXRESTORE_FLAG \
     --archive="$ARCHIVE_NAME" \
     --gzip \
     --uri "$MONGODB_URI"
