@@ -24,6 +24,16 @@ entries:
     version: 0.1.0
   k8s-backups-mongodb:
   - apiVersion: v2
+    appVersion: 0.4.0
+    created: "2025-01-12T19:28:33.806881279Z"
+    description: MongoDB backup as a cronjob
+    digest: 2301b6fbf30cf12a24da9e05cf4db8f926dfb4a64ec93c00b20d2208c9972b6d
+    name: k8s-backups-mongodb
+    type: application
+    urls:
+    - https://github.com/wcgomes/k8s-backups/releases/download/k8s-backups-mongodb-0.4.0/k8s-backups-mongodb-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
     appVersion: 0.3.0
     created: "2024-06-06T18:05:54.524037821Z"
     description: MongoDB backup as a cronjob
