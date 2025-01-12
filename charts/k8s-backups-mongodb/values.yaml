@@ -3,13 +3,15 @@
 # Declare variables to be passed into your templates.
 
 schedule: "0 0 * * *"
-image: "wcgomes/k8s-backups-mongodb:0.4.1"
+image: "wcgomes/k8s-backups-mongodb:0.4.2"
 
 imagePullPolicy: IfNotPresent
 
-withOplog: "true"
-convertLegacyIndexes: "true"
-noIndexRestore: "false"
+# https://www.mongodb.com/pt-br/docs/database-tools/mongodump/#options
+dumpOptionalFlags: ""
+
+# https://www.mongodb.com/pt-br/docs/database-tools/mongorestore/#options
+restoreOptionalFlags: ""
 
 # use a existing secret
 existingSecret: ""

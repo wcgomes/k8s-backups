@@ -29,12 +29,10 @@ spec:
                     secretKeyRef:
                       name: {{ template "k8s-backups-mongodb.secret" . }}
                       key: mongoRestoreDbUri
-                - name: MONGODB_OPLOG
-                  value: {{ .Values.withOplog | quote }}
-                - name: MONGODB_CONVERTLEGACYINDEXES_FLAG
-                  value: {{ .Values.convertLegacyIndexes | quote }}                 
-                - name: MONGODB_NOINDEXRESTORE_FLAG
-                  value: {{ .Values.noIndexRestore | quote }}    
+                - name: MONGODB_DUMP_OPT_FLAGS
+                  value: {{ .Values.dumpOptionalFlags | quote }}                 
+                - name: MONGODB_RESTORE_OPT_FLAGS
+                  value: {{ .Values.restoreOptionalFlags | quote }}    
                 - name: BUCKET_URI
                   valueFrom:
                     secretKeyRef:

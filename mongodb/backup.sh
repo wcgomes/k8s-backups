@@ -3,10 +3,6 @@
 set -e
 
 SCRIPT_NAME=backup-mongodb
-OPLOG_FLAG=""
-OPLOG_REPLAY_FLAG=""
-CONVERTLEGACYINDEXES_FLAG=""
-NOINDEXRESTORE_FLAG=""
 
 # print tool version
 mongodump --version
@@ -23,26 +19,6 @@ if [ ! -z "$AWS_DEFAULT_REGION" ]; then
   AWS_DEFAULT_OPT="--region $AWS_DEFAULT_REGION"
 fi
 
-## flags mongodb
-if [ "$MONGODB_OPLOG" = "true" ]; then
-  echo "[$SCRIPT_NAME] OPLOG Enabled."
-  
-  OPLOG_FLAG="--oplog"
-  OPLOG_REPLAY_FLAG="--oplogReplay"
-fi
-
-if [ "$MONGODB_CONVERTLEGACYINDEXES_FLAG" = "true" ]; then
-  echo "[$SCRIPT_NAME] ConvertLegacyIndexes Enabled."
-  
-  CONVERTLEGACYINDEXES_FLAG="--convertLegacyIndexes"
-fi
-
-if [ "$MONGODB_NOINDEXRESTORE_FLAG" = "true" ]; then
-  echo "[$SCRIPT_NAME] NoIndexRestore Enabled."
-  
-  NOINDEXRESTORE_FLAG="--noIndexRestore"
-fi
-
 # backup
 if [ ! -z "$MONGODB_URI" ]; then
 
@@ -51,7 +27,7 @@ if [ ! -z "$MONGODB_URI" ]; then
   echo "[$SCRIPT_NAME] Dumping all MongoDB databases to compressed archive..."
 
   # run database dump
-  mongodump $OPLOG_FLAG $CONVERTLEGACYINDEXES_FLAG $NOINDEXRESTORE_FLAG \
+  mongodump $MONGODB_DUMP_OPT_FLAGS \
     --archive="$ARCHIVE_NAME" \
     --gzip \
     --uri "$MONGODB_URI"
@@ -104,7 +80,7 @@ if [ ! -z "$MONGODB_RESTORE_URI" ]; then
       echo "[$SCRIPT_NAME] Excluding admin.system.* to Atlas Cluster restore."
 
       # run database restore to atlas cluster
-      mongorestore $OPLOG_REPLAY_FLAG \
+      mongorestore $MONGODB_RESTORE_OPT_FLAGS \
         --archive="$ARCHIVE_NAME" \
         --uri "$MONGODB_RESTORE_URI" \
         --nsExclude "admin.system.*" \
@@ -112,7 +88,7 @@ if [ ! -z "$MONGODB_RESTORE_URI" ]; then
         --drop
   else
       # run database restore
-      mongorestore $OPLOG_REPLAY_FLAG \
+      mongorestore $MONGODB_RESTORE_OPT_FLAGS \
         --archive="$ARCHIVE_NAME" \
         --uri "$MONGODB_RESTORE_URI" \
         --gzip \
