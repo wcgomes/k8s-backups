@@ -80,6 +80,11 @@ if [ ! -z "$PG_RESTORE_HOST" ]; then
     tar -xzf "$COMPRESSED_ARCHIVE_NAME"
   fi
 
+  if test -e "/scripts-custom/prescript.sh"; then
+    echo "$SCRIPT_NAME Running pre processing script..."
+    source /scripts-custom/prescript.sh
+  fi  
+
   echo "$SCRIPT_NAME Restoring PostgreSQL dump..."
 
   # avoid dropping/creating current user

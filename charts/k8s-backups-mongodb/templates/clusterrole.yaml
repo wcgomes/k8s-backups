@@ -1,0 +1,25 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "k8s-backups-mongodb.fullname" . }}
+rules:
+  - apiGroups:
+      - ""
+      - "apps"
+    resources:
+      - deployments
+      - statefulsets
+      - replicasets
+      - pods
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - ""
+      - "apps"
+    resources:
+      - deployments/scale
+      - statefulsets/scale
+      - replicasets/scale
+    verbs:
+      - patch

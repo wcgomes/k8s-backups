@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "k8s-backups-mongodb.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ template "k8s-backups-mongodb.fullname" . }}
+roleRef:
+  kind: ClusterRole
+  name: {{ template "k8s-backups-mongodb.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io

@@ -72,6 +72,11 @@ if [ ! -z "$MONGODB_RESTORE_URI" ]; then
     fi
   fi
 
+  if test -e "/scripts-custom/prescript.sh"; then
+    echo "$SCRIPT_NAME Running pre processing script..."
+    source /scripts-custom/prescript.sh
+  fi  
+
   echo "[$SCRIPT_NAME] Restoring MongoDB dump..."
 
   # check if restore uri contains "mongodb.net"
@@ -107,6 +112,11 @@ fi
 
 if test -e "$ARCHIVE_NAME"; then
   rm "$ARCHIVE_NAME"
+fi
+
+if test -e "/scripts-custom/postscript.sh"; then
+  echo "$SCRIPT_NAME Running post processing script..."
+  source /scripts-custom/postscript.sh
 fi
 
 echo "[$SCRIPT_NAME] Finished!"

@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "k8s-backups-postgresql.fullname" . }}
+  name: {{ template "k8s-backups-mongodb.fullname" . }}
 data:
   {{- if .Values.prescript}}
   prescript.sh: {{ .Values.prescript | quote }}

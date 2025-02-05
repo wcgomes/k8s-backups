@@ -18,11 +18,18 @@ spec:
             - name: {{ .Chart.Name }}
               image: {{ .Values.image }}
               imagePullPolicy: {{ .Values.imagePullPolicy }}
-              {{- if .Values.postscript }}
+              {{- if or .Values.prescript .Values.postscript }}
               volumeMounts:
+                {{- if .Values.prescript }}
+                - name: prescript
+                  mountPath: /scripts-custom
+                  readOnly: true
+                {{- end }}
+                {{- if .Values.postscript }}
                 - name: postscript
                   mountPath: /scripts-custom
                   readOnly: true
+                {{- end }}
               {{- end }}
               env:
                 - name: PG_HOST
@@ -85,9 +92,16 @@ spec:
                     secretKeyRef:
                       name: {{ template "k8s-backups-postgresql.secret" . }}
                       key: password7Zip
-          {{- if .Values.postscript }}
+          {{- if or .Values.prescript .Values.postscript }}
           volumes:
+            {{- if .Values.prescript }}
+            - name: prescript
+              configMap:
+                name: {{ template "k8s-backups-postgresql.fullname" . }}
+            {{- end }}
+            {{- if .Values.postscript }}
             - name: postscript
               configMap:
                 name: {{ template "k8s-backups-postgresql.fullname" . }}
+            {{- end }}
           {{- end }}

@@ -26,3 +26,21 @@ secrets:
   s3EndpointUrl: ""
   awsDefaultRegion: ""
   password7Zip: ""
+
+# shell script to run before backup is restored
+# use it stop services or make database adjustments to another enviroment
+# prescript: |
+#    #!/bin/bash
+#    echo "Initialing script..."
+#    # More commands here
+#    echo "Script completed."
+prescript: ""
+
+# shell script to run after backup is restored
+# use it restart services or make database adjustments to another enviroment
+# postscript: |
+#    #!/bin/bash
+#    echo "Initialing script..."
+#    # More commands here
+#    echo "Script completed."
+postscript: ""
