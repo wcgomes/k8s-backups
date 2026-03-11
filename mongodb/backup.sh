@@ -22,6 +22,24 @@ fi
 # backup
 if [ ! -z "$MONGODB_URI" ]; then
 
+  TEST_FILE_RANDOM="${RANDOM}${RANDOM}"
+  TEST_FILE_NAME="s3_connection_test_${TEST_FILE_RANDOM}.txt"
+  S3_BUCKET_CONNECTION_TEST_FAILED=""
+
+  echo "$TEST_FILE_RANDOM" > "$TEST_FILE_NAME"
+
+  if ! (aws ${S3_ENDPOINT_OPT} ${AWS_DEFAULT_OPT} s3 cp "$TEST_FILE_NAME" "$BUCKET_URI/$TEST_FILE_NAME" && \
+        aws ${S3_ENDPOINT_OPT} ${AWS_DEFAULT_OPT} s3 rm "$BUCKET_URI/$TEST_FILE_NAME"); then
+    S3_BUCKET_CONNECTION_TEST_FAILED=1
+  fi
+
+  rm -f "$TEST_FILE_NAME"
+
+  if [ ! -z "$S3_BUCKET_CONNECTION_TEST_FAILED" ]; then
+    echo "[$SCRIPT_NAME] S3 bucket connection test failed."
+    exit 1
+  fi
+
   ARCHIVE_NAME=mongodump_$(date +%Y%m%d_%H%M%S).gz
 
   echo "[$SCRIPT_NAME] Dumping all MongoDB databases to compressed archive..."
@@ -53,6 +71,11 @@ fi
 # restore
 if [ ! -z "$MONGODB_RESTORE_URI" ]; then
   if [ -z "$MONGODB_URI" ]; then
+    if ! aws ${S3_ENDPOINT_OPT} ${AWS_DEFAULT_OPT} s3 ls "$BUCKET_URI" > /dev/null; then
+      echo "[$SCRIPT_NAME] S3 bucket read test failed."
+      exit 1
+    fi
+
     echo "[$SCRIPT_NAME] Downloading backup from S3 storage..."
 
     COPY_NAME=$(aws ${S3_ENDPOINT_OPT} ${AWS_DEFAULT_OPT} s3 ls "$BUCKET_URI" --recursive | sort | tail -n 1 | awk -F"/" '{print $NF}')
